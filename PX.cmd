@@ -1,7 +1,7 @@
 @echo off
 REM ================================================================
-REM                       Phoenix Utility Suite
-REM             (Developed by MD Faysal Mahmud – Revised)
+REM                             Phoenix Windows Utility Suite
+REM                  (Developed by MD Faysal Mahmud – Revised)
 REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
 REM               optimizing performance, fixing drivers, and
@@ -27,8 +27,8 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo                       PHOENIX UTILITY SUITE
-    echo                   (Developed by MD Faysal Mahmud)
+    echo                             PHOENIX WINDOWS UTILITY SUITE
+    echo                       (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
     echo   [1] Full Windows Update ^& Component Repair
@@ -65,73 +65,100 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo [*] Performing Update Repair...
     echo.
 
-    echo [1/8] Stopping services...
+    echo [1/11] Stopping services...
     for %%S in (wuauserv bits cryptsvc msiserver trustedinstaller) do (
         net stop %%S >nul 2>&1
     )
-    echo       Done.
+    echo        Done.
     echo.
 
-    echo [2/8] Clearing Update caches...
-    rd /s /q "%windir%\SoftwareDistribution"    >nul 2>&1
-    rd /s /q "%windir%\System32\catroot2"        >nul 2>&1
-    md "%windir%\SoftwareDistribution"          >nul
-    md "%windir%\System32\catroot2"            >nul
-    echo       Done.
+    echo [2/11] Clearing Update caches...
+    rd /s /q "%windir%\SoftwareDistribution"      >nul 2>&1
+    rd /s /q "%windir%\System32\catroot2"         >nul 2>&1
+    md "%windir%\SoftwareDistribution"           >nul
+    md "%windir%\System32\catroot2"               >nul
+    echo        Done.
     echo.
 
-    echo [3/8] Re-registering Update DLLs...
+    echo [3/11] Re-registering Update DLLs...
     for %%D in (wuapi.dll wups.dll wuaueng.dll wucltui.dll msxml3.dll) do (
         regsvr32.exe /s %%D >nul 2>&1
     )
-    echo       Done.
+    echo        Done.
     echo.
 
-    echo [4/8] Resetting OSUpgrade registry keys...
+    echo [4/11] Resetting OSUpgrade registry keys...
     reg delete    "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade\Rollback" /f >nul 2>&1
-    reg add       "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade"    /f >nul 2>&1
-    echo       Done.
+    reg add       "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade"       /f >nul 2>&1
+    echo        Done.
     echo.
 
-    echo [5/8] Running SFC (System File Checker)...
+    echo [5/11] Running SFC (System File Checker)...
     echo.
-    echo       ========================= ATTENTION =========================
-    echo       The system scan is starting. This can take 5-15 minutes
-    echo       and may look frozen at first. PLEASE BE PATIENT.
-    echo       You will see a percentage count when verification begins.
-    echo       ===========================================================
+    echo        ========================= ATTENTION =========================
+    echo        The system scan is starting. This can take 5-15 minutes
+    echo        and may look frozen at first. PLEASE BE PATIENT.
+    echo        You will see a percentage count when verification begins.
+    echo        ===========================================================
     echo.
     sfc /scannow
-    echo       SFC complete.
+    echo        SFC complete.
     echo.
 
-    echo [6/8] Running DISM RestoreHealth...
+    echo [6/11] Running DISM RestoreHealth...
     echo.
-    echo       ========================= ATTENTION =========================
-    echo       The component store repair is starting. This is often
-    echo       slower than SFC. PLEASE BE PATIENT AND DO NOT CLOSE.
-    echo       You will see a progress bar when it begins.
-    echo       ===========================================================
+    echo        ========================= ATTENTION =========================
+    echo        The component store repair is starting. This is often
+    echo        slower than SFC. PLEASE BE PATIENT AND DO NOT CLOSE.
+    echo        You will see a progress bar when it begins.
+    echo        ===========================================================
     echo.
     DISM /Online /Cleanup-Image /RestoreHealth
-    echo       DISM complete.
+    echo        DISM complete.
     echo.
 
-    echo [7/8] Restarting services...
+    echo [7/11] Cleaning up component store (WinSxS)...
+    echo.
+    echo        ========================= ATTENTION =========================
+    echo        Component cleanup is starting. This removes unneeded
+    echo        update backups and can take a few minutes. PLEASE BE PATIENT.
+    echo        ===========================================================
+    echo.
+    DISM /Online /Cleanup-Image /StartComponentCleanup
+    echo        Component cleanup complete.
+    echo.
+
+    echo [8/11] Deleting Delivery Optimization cache...
+    rd /s /q "%windir%\SoftwareDistribution\DeliveryOptimization" >nul 2>&1
+    echo        Done.
+    echo.
+
+    echo [9/11] Running deep system cleanup...
+    echo.
+    echo        ========================= ATTENTION =========================
+    echo        A deep system cleanup is now running. This may take
+    echo        several minutes and will not show progress. PLEASE BE PATIENT.
+    echo        ===========================================================
+    echo.
+    cleanmgr /verylowdisk >nul 2>&1
+    echo        Deep cleanup complete.
+    echo.
+
+    echo [10/11] Restarting services...
     for %%S in (wuauserv bits cryptsvc msiserver trustedinstaller) do (
         net start %%S >nul 2>&1
     )
-    echo       Done.
+    echo        Done.
     echo.
 
-    echo [8/8] Forcing new update detection...
+    echo [11/11] Forcing new update detection...
     wuauclt /resetauthorization /detectnow >nul 2>&1
     if exist "%windir%\System32\UsoClient.exe" (
         UsoClient StartScan >nul 2>&1
     ) else (
         wuauclt /updatenow >nul 2>&1
     )
-    echo       Scan initiated.
+    echo        Scan initiated.
     echo.
 
     echo ================================================================
@@ -173,56 +200,56 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     )
     REM ============================== FIX V2 END =================================
 
-    echo       Done.
+    echo        Done.
     echo.
 
     echo [2/5] Running SFC (System File Checker)...
     echo.
-    echo       ========================= ATTENTION =========================
-    echo       The system scan is starting. This can take 5-15 minutes
-    echo       and may look frozen at first. PLEASE BE PATIENT.
-    echo       You will see a percentage count when verification begins.
-    echo       ===========================================================
+    echo        ========================= ATTENTION =========================
+    echo        The system scan is starting. This can take 5-15 minutes
+    echo        and may look frozen at first. PLEASE BE PATIENT.
+    echo        You will see a percentage count when verification begins.
+    echo        ===========================================================
     echo.
     sfc /scannow
-    echo       SFC scan complete.
+    echo        SFC scan complete.
     echo.
 
     echo [3/5] Running DISM RestoreHealth...
     echo.
-    echo       ========================= ATTENTION =========================
-    echo       The component store repair is starting. This is often
-    echo       slower than SFC. PLEASE BE PATIENT AND DO NOT CLOSE.
-    echo       You will see a progress bar when it begins.
-    echo       ===========================================================
+    echo        ========================= ATTENTION =========================
+    echo        The component store repair is starting. This is often
+    echo        slower than SFC. PLEASE BE PATIENT AND DO NOT CLOSE.
+    echo        You will see a progress bar when it begins.
+    echo        ===========================================================
     echo.
     DISM /Online /Cleanup-Image /RestoreHealth
-    echo       DISM scan complete.
+    echo        DISM scan complete.
     echo.
 
     echo [4/5] Optimizing disk (Defrag ^& Trim)...
-    echo       This will now run. You will see its progress below.
+    echo        This will now run. You will see its progress below.
     defrag C: /O
-    echo       Disk optimization complete.
+    echo        Disk optimization complete.
     echo.
 
     echo [5/5] Launching Disk Cleanup UI...
     echo.
-    echo       ========================= ACTION REQUIRED =========================
-    echo       A new window will open. Please SELECT the items you want
-    echo       to clean, then click OK. The script will wait for you.
-    echo       ===================================================================
+    echo        ========================= ACTION REQUIRED =========================
+    echo        A new window will open. Please SELECT the items you want
+    echo        to clean, then click OK. The script will wait for you.
+    echo        ===================================================================
     echo.
     start "" /wait cleanmgr /sageset:1
     
     echo.
-    echo       ========================= PLEASE WAIT =========================
-    echo       Disk Cleanup is now running based on your selections.
-    echo       This window will wait until it is finished.
-    echo       =============================================================
+    echo        ========================= PLEASE WAIT =========================
+    echo        Disk Cleanup is now running based on your selections.
+    echo        This window will wait until it is finished.
+    echo        =============================================================
     echo.
     start "" /wait cleanmgr /sagerun:1
-    echo       Disk Cleanup finished.
+    echo        Disk Cleanup finished.
     echo.
 
     echo ================================================================
@@ -245,12 +272,12 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo [1/2] Backing up drivers to C:\PhoenixDriverBackup...
     md C:\PhoenixDriverBackup >nul 2>&1
     pnputil /export-driver * C:\PhoenixDriverBackup >nul 2>&1
-    echo       Backup complete.
+    echo        Backup complete.
     echo.
 
     echo [2/2] Scanning for hardware changes...
     pnputil /scan-devices
-    echo       Scan complete.
+    echo        Scan complete.
     echo.
 
     echo ================================================================
@@ -270,22 +297,22 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     ipconfig /release     >nul 2>&1
     ipconfig /renew       >nul 2>&1
     ipconfig /registerdns >nul 2>&1
-    echo       Done.
+    echo        Done.
     echo.
 
     echo [2/5] Winsock reset...
     netsh winsock reset   >nul 2>&1
-    echo       Done.
+    echo        Done.
     echo.
 
     echo [3/5] TCP/IP reset...
     netsh int ip reset    >nul 2>&1
-    echo       Done.
+    echo        Done.
     echo.
 
     echo [4/5] Resetting Windows Firewall...
     netsh advfirewall reset>nul 2>&1
-    echo       Done.
+    echo        Done.
     echo.
 
     echo ================================================================
@@ -317,7 +344,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     cls
     title Limitations and Advanced Information
     echo ================================================================
-    echo       What This Script CANNOT Fix
+    echo        What This Script CANNOT Fix
     echo ================================================================
     echo.
     echo This script is powerful, but some issues require manual intervention:
