@@ -1,4 +1,4 @@
-# Phoenix Utility Suite
+# Phoenix Windows Utility Suite
 
 **Developed by: MD Faysal Mahmud**
 
@@ -6,7 +6,7 @@ A comprehensive, all-in-one toolkit designed to diagnose and repair a wide range
 
 ---
 
-## What is the Phoenix Utility Suite?
+## What is the Phoenix Windows Utility Suite?
 
 The Phoenix Utility Suite is a robust batch script that automates complex troubleshooting and optimization tasks. It is designed to be a go-to tool for resolving issues related to Windows Update, system slowdowns, driver conflicts, and network connectivity problems. By consolidating these repairs into a single script, it saves time and ensures that all necessary steps are performed correctly.
 
