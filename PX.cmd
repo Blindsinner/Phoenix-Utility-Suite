@@ -169,9 +169,9 @@ echo.
 
 echo [5/5] Launching Disk Cleanup...
 echo      Please select items to clean in the window that appears, then click OK.
-cleanmgr /sageset:1
+start "" /wait cleanmgr /sageset:1
 echo      When ready, Disk Cleanup will run. This may take some time.
-cleanmgr /sagerun:1
+start "" /wait cleanmgr /sagerun:1
 echo      Disk Cleanup finished.
 echo.
 
