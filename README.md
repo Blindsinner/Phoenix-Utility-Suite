@@ -1,5 +1,3 @@
-# Phoenix Windows Utility Suite
----
 <div align="center">
   <img src="https://github.com/Blindsinner/Phoenix-Windows-Utility-Suite/blob/main/PX.png" alt="Phoenix Utility Suite Logo" width="250">
 </div>
