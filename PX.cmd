@@ -99,7 +99,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo        Done.
     echo.
 
-    echo [6/13] Resetting network components (Winsock & Proxy)...
+    echo [6/13] Resetting network components (Winsock ^& Proxy)...
     netsh winsock reset >nul 2>&1
     netsh winsock reset proxy >nul 2>&1
     echo        Done.
