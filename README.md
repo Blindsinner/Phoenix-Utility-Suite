@@ -47,7 +47,7 @@ This one-line command downloads and runs the suite automatically.
 If you prefer to download the file yourself, follow these steps:
 
 1.  Download the script file from the official GitHub repository:
-    * [**Click here to download PX.cmd**](https://raw.githubusercontent.com/Blindsinner/Phoenix-Utility-Suite/refs/heads/main/PX.cmd)
+    * [**Click here to download PX.cmd**](https://raw.githubusercontent.com/Blindsinner/Phoenix-Utility-Suite/main/PX.cmd)
 2.  Save the `PX.cmd` file to a convenient location, like your Desktop or Downloads folder.
 3.  Right-click the `PX.cmd` file and select **"Run as administrator"**.
 4.  The Phoenix Utility Suite menu will appear.
