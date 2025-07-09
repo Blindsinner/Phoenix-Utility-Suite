@@ -125,7 +125,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 :performance_fix
     cls
     title System Performance ^& Health Optimization
-    echo [*] Running full Performance & Health sweep...
+    echo [*] Running full Performance ^& Health sweep...
     echo.
 
     REM -- 1) User-temp clean
@@ -169,7 +169,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
     REM -- 6) Disable startup programs
     echo [7/12] Disabling unnecessary startup programs...
-    for /f "tokens=1,2* delims=," %%a in ('wmic startup get Command^,Location^ /format:csv ^| findstr /v /i "Command,Location"') do (
+    for /f "tokens=1,2* delims=," %%a in ('wmic startup get Command^,Location /format:csv ^| findstr /v /i "Command,Location"') do (
         wmic startup where "Location='%%b'" call disable >nul 2>&1
     )
     echo      Done.
@@ -202,15 +202,23 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo      Done.
     echo.
 
-    REM -- 11) SFC & DISM
-    echo [12/12] Running SFC & DISM health restore...
+    REM -- 11) SFC & conditional DISM
+    echo [12/12] Running SFC ^& DISM health restore...
     sfc /scannow
-    DISM /Online /Cleanup-Image /RestoreHealth
+
+    ver | findstr /r "^10\." >nul
+    if %errorlevel%==0 (
+        REM Windows 10 / 11 → RestoreHealth supported
+        DISM /Online /Cleanup-Image /RestoreHealth
+    ) else (
+        REM Older Windows → fallback component cleanup
+        DISM /Online /Cleanup-Image /StartComponentCleanup
+    )
     echo      Done.
     echo.
 
     echo =============================================================================
-    echo [SUCCESS] Performance & health optimization complete.
+    echo [SUCCESS] Performance ^& health optimization complete.
     echo =============================================================================
     pause
     goto menu
