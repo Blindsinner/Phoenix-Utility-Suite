@@ -1,6 +1,6 @@
 @echo off
 REM ================================================================
-REM                       Phoenix WIN Utility Suite
+REM                       Phoenix Utility Suite
 REM             (Developed by MD Faysal Mahmud – Revised)
 REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
@@ -27,7 +27,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo                       PHOENIX WINDOWS UTILITY SUITE
+    echo                       PHOENIX UTILITY SUITE
     echo                   (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
@@ -148,19 +148,30 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
     echo [1/5] Cleaning temp files...
     
-    REM ============================= FIX START ===================================
-    REM The original 'rd /s /q' command deleted the folder containing this script,
-    REM causing it to crash. The corrected commands below delete the *contents*
-    REM of the temp folders, which is safer and prevents the crash.
-    
-    del /q /f /s "%SystemRoot%\Temp\*.*" >nul 2>&1
+    REM ============================= FIX V2 START ================================
+    REM The script runs from the Temp folder, so we must avoid deleting it.
+    REM This logic deletes all files and folders from Temp while skipping this
+    REM script file (%~f0).
+
+    REM First, delete all sub-folders within the main Temp directory (safe).
+    for /d %%D in ("%SystemRoot%\Temp\*") do rd /s /q "%%D" >nul 2>&1
+
+    REM Next, delete all files in the root of Temp, EXCEPT for this script.
+    for %%F in ("%SystemRoot%\Temp\*.*") do (
+        if /i not "%%~fF"=="%~f0" (
+            del /f /q "%%F" >nul 2>&1
+        )
+    )
+
+    REM Clean Prefetch and User temp folders (these are in different locations
+    REM and are safe to clean normally).
     del /q /f /s "%SystemRoot%\Prefetch\*.*" >nul 2>&1
     for /d %%U in ("C:\Users\*") do (
         if exist "%%U\AppData\Local\Temp" (
             del /q /f /s "%%U\AppData\Local\Temp\*.*" >nul 2>&1
         )
     )
-    REM ============================== FIX END ====================================
+    REM ============================== FIX V2 END =================================
 
     echo       Done.
     echo.
