@@ -1,6 +1,6 @@
 @echo off
 REM ================================================================
-REM                      Phoenix Utility Suite
+REM                      Phoenix Windows Utility Suite
 REM              (Developed by MD Faysal Mahmud – Revised)
 REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
