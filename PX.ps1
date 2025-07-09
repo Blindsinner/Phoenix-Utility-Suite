@@ -11,9 +11,8 @@
 
 .NOTES
     Author: MD FAYSAL MAHMUD
-    For best results with the underlying Phoenix Utility Suite,
-    run this PowerShell script with administrative privileges
-    (Right-click -> "Run with PowerShell").
+    For instructions, see the project repository: https://github.com/Blindsinner/Phoenix-Utility-Suite
+    For best results, run this PowerShell script with administrative privileges.
 #>
 
 # Stop the script immediately if any command fails.
@@ -24,6 +23,8 @@ $ErrorActionPreference = "Stop"
 
 # The direct URL to your raw batch file on GitHub.
 $DownloadURL = 'https://raw.githubusercontent.com/Blindsinner/Phoenix-Utility-Suite/refs/heads/main/PX.cmd'
+# A fallback URL in case the first one fails (can be the same for a simple retry).
+$DownloadURL2 = 'https://raw.githubusercontent.com/Blindsinner/Phoenix-Utility-Suite/refs/heads/main/PX.cmd'
 
 Write-Host "Preparing to download the Phoenix Utility Suite..."
 
@@ -40,9 +41,17 @@ Write-Host "Temporary file will be created at: $FilePath"
 
 # --- Download and Execution ---
 try {
-    # Download the script content from the URL.
-    Write-Host "Downloading from: $DownloadURL"
-    $response = Invoke-WebRequest -Uri $DownloadURL -UseBasicParsing
+    # Attempt to download the script content from the primary URL.
+    try {
+        Write-Host "Downloading from primary URL: $DownloadURL"
+        $response = Invoke-WebRequest -Uri $DownloadURL -UseBasicParsing
+    }
+    catch {
+        # If the primary URL fails, try the fallback URL.
+        Write-Warning "Primary download failed. Trying fallback URL..."
+        Write-Host "Downloading from fallback URL: $DownloadURL2"
+        $response = Invoke-WebRequest -Uri $DownloadURL2 -UseBasicParsing
+    }
     
     # Add a unique REM line at the beginning of the script content.
     $prefix = "@REM $rand `r`n"
@@ -52,14 +61,14 @@ try {
     Set-Content -Path $FilePath -Value $content -Encoding Ascii
     Write-Host "Download complete. Executing the suite..."
     
-    # Start the downloaded batch file and pass any arguments to it.
+    # Start the downloaded batch file with admin rights and pass any arguments to it.
     # The -Wait parameter ensures this script pauses until the batch file is closed.
     Start-Process -FilePath $FilePath -ArgumentList $args -Wait -Verb RunAs
 
 }
 catch {
     # If any part of the 'try' block fails, display the error.
-    Write-Error "An error occurred during download or execution: $_"
+    Write-Error "A critical error occurred during download or execution: $_"
     pause
 }
 finally {
