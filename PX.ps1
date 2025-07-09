@@ -1,6 +1,6 @@
 # Phoenix Utility Suite - Robust Downloader
 # Developed by MD Faysal Mahmud
-# This version uses a more reliable waiting process to prevent crashes when launching graphical tools.
+# This version launches the main script and lets it self-delete to prevent crashes.
 
 $ErrorActionPreference = "Stop"
 # Enable TLSv1.2 for compatibility with older clients
@@ -29,29 +29,11 @@ try {
     $content = $prefix + $response.Content
     Set-Content -Path $FilePath -Value $content
 
-    # Start the process and get the process object itself. This is the key change.
-    $process = Start-Process -FilePath $FilePath -ArgumentList $ScriptArgs -Verb RunAs -PassThru
-    
-    # Use the more reliable WaitForExit() method to ensure the script waits correctly.
-    # This will not get confused by graphical sub-programs like Disk Cleanup.
-    if ($process) {
-        $process.WaitForExit()
-    }
-
+    # Start the process and immediately exit. The batch file will handle its own cleanup.
+    Start-Process -FilePath $FilePath -ArgumentList $ScriptArgs -Verb RunAs
 }
 catch {
     # If any part of the 'try' block fails, display the error.
     Write-Error "A critical error occurred during download or execution: $_"
     pause
-}
-finally {
-    # --- Cleanup ---
-    # This block runs regardless of whether the script succeeded or failed.
-    $FilePaths = @("$env:TEMP\PX_*.cmd", "$env:SystemRoot\Temp\PX_*.cmd")
-    foreach ($Path in $FilePaths) { 
-        $matchingFiles = Get-Item $Path -ErrorAction SilentlyContinue
-        if ($null -ne $matchingFiles) {
-            $matchingFiles | Remove-Item -Force
-        }
-    }
 }
