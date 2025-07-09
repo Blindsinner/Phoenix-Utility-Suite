@@ -54,15 +54,30 @@ If you prefer to download the file yourself, follow these steps:
 
 ---
 
-## Features Explained
+## Features Explained in Detail
 
-The suite is organized into several key functions:
+The suite is organized into several key functions, each performing specific, powerful actions:
 
--   **[1] Full Windows Update & Component Repair:** This is the most comprehensive fix for update-related problems. It stops update services, clears all caches, re-registers essential files, fixes component corruption with SFC and DISM, and restarts the process.
--   **[2] System Performance & Health Optimization:** This option cleans temporary files from all user profiles, runs SFC and DISM to ensure system integrity, and defragments your primary drive to improve performance.
--   **[3] Driver & Hardware Reset:** This function backs up your current drivers and rescans your system's hardware, which can help resolve conflicts or issues with malfunctioning devices.
--   **[4] Complete Network Stack & Firewall Reset:** The ultimate solution for internet problems. It flushes your DNS, resets your computer's IP configuration, and restores both the Winsock catalog and the Windows Firewall to their default states.
--   **[5] Run Security Scan (Microsoft Defender):** Updates your antivirus definitions and initiates a quick scan to check for malware.
+-   **[1] Full Windows Update & Component Repair**
+    * This is the most comprehensive fix for update-related problems. It stops all relevant services (`wuauserv`, `bits`, `cryptsvc`, etc.), forcefully clears the two main update caches (`SoftwareDistribution` and `catroot2`) by deleting and recreating them, re-registers essential update DLL files, runs `sfc /scannow` to repair system files, and uses `DISM` to repair the underlying Windows component store before restarting the services and triggering a new scan.
+
+-   **[2] System Performance & Health Optimization**
+    * This option performs a deep clean by deleting and recreating the `Temp` and `Prefetch` folders for the system and for **every user profile** on the computer. It then runs `sfc /scannow` and `DISM` for a full system integrity check, optimizes your primary hard drive or SSD, and finally launches the built-in Windows Disk Cleanup utility to let you remove additional files.
+
+-   **[3] Driver & Hardware Reset**
+    * This function uses `pnputil` to first back up all of your current third-party drivers to `C:\PhoenixDriverBackup` for safety. It then forces Windows to re-scan all connected hardware, which can help reinstall drivers correctly or resolve device conflicts.
+
+-   **[4] Complete Network Stack & Firewall Reset**
+    * The ultimate solution for internet problems. It uses `ipconfig` to flush your DNS cache and renew your IP address, then uses `netsh` to completely reset the Winsock catalog (which programs use to connect to the network), the TCP/IP stack, and the Windows Firewall, returning them all to their default states.
+
+-   **[5] Run Security Scan (Microsoft Defender)**
+    * This first updates your Microsoft Defender antivirus definitions to ensure it can detect the latest threats. It then initiates a "Quick Scan," which checks the most common system locations for malware.
+
+-   **[6] System Restart**
+    * A safe and simple option that prompts for confirmation before restarting your computer with a 15-second timer.
+
+-   **[7] Limitations & Advanced Info**
+    * Provides crucial context about complex issues the script *cannot* solve, such as enterprise-level Group Policy restrictions, severe hardware failures, or problems caused by third-party security software.
 
 ---
 
