@@ -6,7 +6,7 @@ REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
 REM               optimizing performance, fixing drivers, and
 REM               resolving network issues.
-REM  Usage: Save as .bat, right-click, “Run as administrator”.
+REM  Usage: Save as .bat, right-click, "Run as administrator".
 REM ================================================================
 
 setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
