@@ -101,12 +101,14 @@ echo      Registry keys reset.
 echo.
 
 echo [5/8] Running System File Checker (SFC) to fix corrupted files...
-sfc /scannow >nul 2>&1
+echo      This may take several minutes. Please be patient.
+sfc /scannow
 echo      SFC scan complete.
 echo.
 
 echo [6/8] Running DISM to restore component store health...
-DISM /Online /Cleanup-Image /RestoreHealth >nul 2>&1
+echo      This may also take a long time.
+DISM /Online /Cleanup-Image /RestoreHealth
 echo      DISM health restore complete.
 echo.
 
@@ -150,13 +152,13 @@ for /d %%p in ("C:\Users\*") do (
 echo      Temporary files cleared.
 echo.
 
-echo [2/5] Running System File Checker (SFC)...
-sfc /scannow >nul 2>&1
+echo [2/5] Running System File Checker (SFC)... This may take several minutes.
+sfc /scannow
 echo      SFC complete.
 echo.
 
-echo [3/5] Running DISM Health Restore...
-DISM /Online /Cleanup-Image /RestoreHealth >nul 2>&1
+echo [3/5] Running DISM Health Restore... This may also take a long time.
+DISM /Online /Cleanup-Image /RestoreHealth
 echo      DISM complete.
 echo.
 
@@ -166,8 +168,9 @@ echo      Disk optimization complete.
 echo.
 
 echo [5/5] Launching Disk Cleanup...
-echo      Please select items to clean and press OK.
-cleanmgr /sageset:1 >nul 2>&1
+echo      Please select items to clean in the window that appears, then click OK.
+cleanmgr /sageset:1
+echo      When ready, Disk Cleanup will run. This may take some time.
 cleanmgr /sagerun:1
 echo      Disk Cleanup finished.
 echo.
