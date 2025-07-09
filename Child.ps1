@@ -1,4 +1,4 @@
-# Check the instructions here on how to use it https://github.com/Blindsinner/Phoenix-Utility-Suite
+# Check the instructions here on how to use it https://github.com/Blindsinner/Phoenix-Windows-Utility-Suite
 
 $ErrorActionPreference = "Stop"
 # Enable TLSv1.2 for compatibility with older clients
