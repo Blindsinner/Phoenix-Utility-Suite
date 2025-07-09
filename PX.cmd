@@ -1,6 +1,6 @@
 @echo off
 REM ================================================================
-REM                      Phoenix Windows Utility Suite 2.0
+REM                      Phoenix Windows Utility Suite
 REM              (Developed by MD Faysal Mahmud – Revised)
 REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
@@ -27,7 +27,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo                     PHOENIX WINDOWS UTILITY SUITE 2.0
+    echo                     PHOENIX WINDOWS UTILITY SUITE
     echo                    (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
@@ -81,8 +81,10 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo [3/13] Renaming cache folders (SoftwareDistribution ^& catroot2)...
-    Ren %Systemroot%\SoftwareDistribution SoftwareDistribution.old >nul 2>&1
-    Ren %Systemroot%\System32\catroot2 catroot2.old >nul 2>&1
+    if exist "%Systemroot%\SoftwareDistribution.old" ( rd /s /q "%Systemroot%\SoftwareDistribution.old" >nul 2>&1 )
+    if exist "%Systemroot%\System32\catroot2.old" ( rd /s /q "%Systemroot%\System32\catroot2.old" >nul 2>&1 )
+    if exist "%Systemroot%\SoftwareDistribution" ( Ren %Systemroot%\SoftwareDistribution SoftwareDistribution.old >nul 2>&1 )
+    if exist "%Systemroot%\System32\catroot2" ( Ren %Systemroot%\System32\catroot2 catroot2.old >nul 2>&1 )
     echo        Done.
     echo.
     
@@ -197,7 +199,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     REM Clean Prefetch and User temp folders (these are in different locations
     REM and are safe to clean normally).
     del /q /f /s "%SystemRoot%\Prefetch\*.*" >nul 2>&1
-    for /d %%U in ("C:\Users\*") do (
+    for /d %%U in ("%SystemDrive%\Users\*") do (
         if exist "%%U\AppData\Local\Temp" (
             del /q /f /s "%%U\AppData\Local\Temp\*.*" >nul 2>&1
         )
@@ -233,7 +235,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
     echo [4/5] Optimizing disk (Defrag ^& Trim)...
     echo        This will now run. You will see its progress below.
-    defrag C: /O
+    defrag %SystemDrive% /O
     echo        Disk optimization complete.
     echo.
 
@@ -273,9 +275,9 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     if /i not "%confirm%"=="Y" goto menu
     echo.
 
-    echo [1/2] Backing up drivers to C:\PhoenixDriverBackup...
-    md C:\PhoenixDriverBackup >nul 2>&1
-    pnputil /export-driver * C:\PhoenixDriverBackup >nul 2>&1
+    echo [1/2] Backing up drivers to %SystemDrive%\PhoenixDriverBackup...
+    if not exist "%SystemDrive%\PhoenixDriverBackup" ( md %SystemDrive%\PhoenixDriverBackup >nul 2>&1 )
+    pnputil /export-driver * %SystemDrive%\PhoenixDriverBackup >nul 2>&1
     echo        Backup complete.
     echo.
 
@@ -377,8 +379,8 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo This will restart your PC in 15 seconds.
     echo Save all work before proceeding.
     echo.
-    set /p "confirm=Press Y to restart, any other key to cancel: "
-    if /i "%confirm%"=="Y" (
+    set /p "choice=Press Y to restart, any other key to cancel: "
+    if /i "%choice%"=="Y" (
         shutdown /r /t 15 /c "Restart initiated by Phoenix Utility Suite." /f
         echo Restart command sent. Exiting...
         timeout /t 5 >nul
