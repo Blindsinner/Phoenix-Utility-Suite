@@ -3,10 +3,10 @@ REM ================================================================
 REM                      Phoenix Utility Suite
 REM              (Developed by MD Faysal Mahmud – Revised)
 REM
-REM  Description: All‑in‑one toolkit for repairing Windows Update,
+REM  Description: All-in-one toolkit for repairing Windows Update,
 REM               optimizing performance, fixing drivers, and
 REM               resolving network issues.
-REM  Usage: Save as .bat, right‑click, “Run as administrator”.
+REM  Usage: Save as .bat, right-click, “Run as administrator”.
 REM ================================================================
 
 setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
@@ -16,7 +16,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     if %errorlevel% neq 0 (
         cls
         echo [ERROR] This script requires administrative privileges.
-        echo Please right‑click and select “Run as administrator”.
+        echo Please right-click and select “Run as administrator”.
         pause
         exit /b
     )
@@ -27,14 +27,14 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo                   PHOENIX UTILITY SUITE
-    echo                (Developed by MD Faysal Mahmud)
+    echo                      PHOENIX UTILITY SUITE
+    echo                   (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
-    echo   [1] Full Windows Update & Component Repair
-    echo   [2] System Performance & Health Optimization
-    echo   [3] Driver & Hardware Reset
-    echo   [4] Complete Network Stack & Firewall Reset
+    echo   [1] Full Windows Update ^& Component Repair
+    echo   [2] System Performance ^& Health Optimization
+    echo   [3] Driver ^& Hardware Reset
+    echo   [4] Complete Network Stack ^& Firewall Reset
     echo   [5] Run Security Scan (Microsoft Defender)
     echo   [6] System Restart
     echo   [0] Exit
@@ -59,7 +59,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 :update_fix
     cls
-    title Windows Update & Component Repair
+    title Windows Update ^& Component Repair
     echo [*] Performing Update Repair...
     echo.
 
@@ -78,7 +78,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo      Done.
     echo.
 
-    echo [3/8] Re‑registering Update DLLs...
+    echo [3/8] Re-registering Update DLLs...
     for %%D in (wuapi.dll wups.dll wuaueng.dll wucltui.dll msxml3.dll) do (
         regsvr32.exe /s %%D >nul 2>&1
     )
@@ -86,8 +86,8 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo [4/8] Resetting OSUpgrade registry keys...
-    reg delete     "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade\Rollback" /f >nul 2>&1
-    reg add        "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade"      /f >nul 2>&1
+    reg delete   "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade\Rollback" /f >nul 2>&1
+    reg add      "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade"    /f >nul 2>&1
     echo      Done.
     echo.
 
@@ -121,15 +121,15 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo ================================================================
-    echo [SUCCESS] Update repair complete. Check Settings → Windows Update.
+    echo [SUCCESS] Update repair complete. Check Settings -^> Windows Update.
     echo ================================================================
     pause
     goto menu
 
 :performance_fix
     cls
-    title System Performance & Health Optimization
-    echo [*] Optimizing Performance & Health...
+    title System Performance ^& Health Optimization
+    echo [*] Optimizing Performance ^& Health...
     echo.
 
     echo [1/5] Cleaning temp files...
@@ -154,7 +154,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo      Done.
     echo.
 
-    echo [4/5] Optimizing disk (Defrag & Trim)...
+    echo [4/5] Optimizing disk (Defrag ^& Trim)...
     defrag C: /O >nul
     echo      Done.
     echo.
@@ -173,8 +173,8 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 :driver_fix
     cls
-    title Driver & Hardware Reset
-    echo [*] Resetting Drivers & Hardware...
+    title Driver ^& Hardware Reset
+    echo [*] Resetting Drivers ^& Hardware...
     echo.
     echo [WARNING] Screen flicker possible. A reboot is recommended.
     echo.
@@ -201,11 +201,11 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 :network_fix
     cls
-    title Network Stack & Firewall Reset
-    echo [*] Resetting Network Stack & Firewall...
+    title Network Stack ^& Firewall Reset
+    echo [*] Resetting Network Stack ^& Firewall...
     echo.
 
-    echo [1/5] IP/DNS flush & renew...
+    echo [1/5] IP/DNS flush ^& renew...
     ipconfig /flushdns   >nul 2>&1
     ipconfig /release    >nul 2>&1
     ipconfig /renew      >nul 2>&1
