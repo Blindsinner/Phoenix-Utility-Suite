@@ -1,6 +1,6 @@
 @echo off
 REM ================================================================
-REM                      Phoenix Windows Utility Suite
+REM                      Phoenix Utility Suite
 REM              (Developed by MD Faysal Mahmud – Revised)
 REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
@@ -147,11 +147,29 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo [1/5] Cleaning temp files (using robust method)...
-    if exist "%SystemRoot%\Temp" ( rd /s /q "%SystemRoot%\Temp" & md "%SystemRoot%\Temp" ) >nul 2>&1
-    if exist "%SystemRoot%\Prefetch" ( rd /s /q "%SystemRoot%\Prefetch" & md "%SystemRoot%\Prefetch" ) >nul 2>&1
+    REM -- This method deletes files and then removes/recreates the folders to ensure a thorough cleaning.
+    REM -- It will skip any files that are currently locked or in use.
+
+    REM -- Clean Windows Temp Folder
+    if exist "%SystemRoot%\Temp" (
+        del /q /f /s "%SystemRoot%\Temp\*" >nul 2>&1
+        rd /s /q "%SystemRoot%\Temp" >nul 2>&1
+        md "%SystemRoot%\Temp" >nul 2>&1
+    )
+
+    REM -- Clean Prefetch Folder
+    if exist "%SystemRoot%\Prefetch" (
+        del /q /f /s "%SystemRoot%\Prefetch\*" >nul 2>&1
+        rd /s /q "%SystemRoot%\Prefetch" >nul 2>&1
+        md "%SystemRoot%\Prefetch" >nul 2>&1
+    )
+
+    REM -- Clean All User Temp Folders (%TEMP%)
     for /d %%U in ("C:\Users\*") do (
         if exist "%%U\AppData\Local\Temp" (
-            ( rd /s /q "%%U\AppData\Local\Temp" & md "%%U\AppData\Local\Temp" ) >nul 2>&1
+            del /q /f /s "%%U\AppData\Local\Temp\*" >nul 2>&1
+            rd /s /q "%%U\AppData\Local\Temp" >nul 2>&1
+            md "%%U\AppData\Local\Temp" >nul 2>&1
         )
     )
     echo      Done.
@@ -182,28 +200,14 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo [4/5] Optimizing disk (Defrag ^& Trim)...
-    echo      This will now run. You will see its progress below.
-    defrag C: /O
-    echo      Disk optimization complete.
+    defrag C: /O >nul
+    echo      Done.
     echo.
 
     echo [5/5] Launching Disk Cleanup UI...
-    echo.
-    echo      ========================= ACTION REQUIRED =========================
-    echo      A new window will open. Please SELECT the items you want
-    echo      to clean, then click OK. The script will wait for you.
-    echo      ===================================================================
-    echo.
     start "" /wait cleanmgr /sageset:1
-    
-    echo.
-    echo      ========================= PLEASE WAIT =========================
-    echo      Disk Cleanup is now running based on your selections.
-    echo      This window will wait until it is finished.
-    echo      =============================================================
-    echo.
     start "" /wait cleanmgr /sagerun:1
-    echo      Disk Cleanup finished.
+    echo      Done.
     echo.
 
     echo ================================================================
