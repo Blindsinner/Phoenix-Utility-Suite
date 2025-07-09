@@ -37,7 +37,7 @@ This one-line command downloads and runs the suite automatically.
 2.  Copy and paste the following command into the blue or black terminal window and press **Enter**:
 
     ```powershell
-    iex (irm is.gd/winfix)
+    iex (irm is.gd/wafix)
     ```
 
 3.  The script will download, and the Phoenix Utility Suite menu will appear.
