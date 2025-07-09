@@ -1,6 +1,6 @@
 @echo off
 REM ================================================================
-REM              Phoenix Windows Utility Suite (Enterprise)
+REM                      Phoenix Windows Utility Suite
 REM              (Developed by MD Faysal Mahmud – Revised)
 REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
@@ -27,7 +27,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo               PHOENIX WINDOWS UTILITY SUITE (Enterprise)
+    echo                     PHOENIX WINDOWS UTILITY SUITE
     echo                    (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
