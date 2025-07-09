@@ -2,11 +2,6 @@
 REM ================================================================
 REM                      Phoenix Utility Suite
 REM              (Developed by MD Faysal Mahmud – Revised)
-REM
-REM  Description: All-in-one toolkit for repairing Windows Update,
-REM               optimizing performance, fixing drivers, and
-REM               resolving network issues.
-REM  Usage: Save as .bat, right-click, “Run as administrator”.
 REM ================================================================
 
 setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
@@ -16,7 +11,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     if %errorlevel% neq 0 (
         cls
         echo [ERROR] This script requires administrative privileges.
-        echo Please right-click and select “Run as administrator”.
+        echo Please right‑click and select “Run as administrator”.
         pause
         exit /b
     )
@@ -27,8 +22,8 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo                      PHOENIX UTILITY SUITE
-    echo                   (Developed by MD Faysal Mahmud)
+    echo                   PHOENIX UTILITY SUITE
+    echo                (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
     echo   [1] Full Windows Update ^& Component Repair
@@ -42,7 +37,6 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo ================================================================
     set /p "choice=Enter your choice [0-6]: "
 
-    rem Dispatch
     if "%choice%"=="1" goto update_fix
     if "%choice%"=="2" goto performance_fix
     if "%choice%"=="3" goto driver_fix
@@ -51,7 +45,6 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     if "%choice%"=="6" goto restart_pc
     if "%choice%"=="0" exit /b
 
-    rem Invalid selection
     echo.
     echo [ERROR] Invalid choice. Please select a number between 0 and 6.
     pause
@@ -78,7 +71,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo      Done.
     echo.
 
-    echo [3/8] Re-registering Update DLLs...
+    echo [3/8] Re‑registering Update DLLs...
     for %%D in (wuapi.dll wups.dll wuaueng.dll wucltui.dll msxml3.dll) do (
         regsvr32.exe /s %%D >nul 2>&1
     )
@@ -86,8 +79,8 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo [4/8] Resetting OSUpgrade registry keys...
-    reg delete   "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade\Rollback" /f >nul 2>&1
-    reg add      "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade"    /f >nul 2>&1
+    reg delete     "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade\Rollback" /f >nul 2>&1
+    reg add        "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade"      /f >nul 2>&1
     echo      Done.
     echo.
 
@@ -121,7 +114,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo ================================================================
-    echo [SUCCESS] Update repair complete. Check Settings -^> Windows Update.
+    echo [SUCCESS] Update repair complete. Check Settings → Windows Update.
     echo ================================================================
     pause
     goto menu
@@ -201,11 +194,11 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 :network_fix
     cls
-    title Network Stack ^& Firewall Reset
+    title Complete Network Stack ^& Firewall Reset
     echo [*] Resetting Network Stack ^& Firewall...
     echo.
 
-    echo [1/5] IP/DNS flush ^& renew...
+    echo [1/5] IP/DNS flush & renew...
     ipconfig /flushdns   >nul 2>&1
     ipconfig /release    >nul 2>&1
     ipconfig /renew      >nul 2>&1
