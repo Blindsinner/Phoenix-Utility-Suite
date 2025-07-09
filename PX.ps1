@@ -4,8 +4,8 @@ $ErrorActionPreference = "Stop"
 # Enable TLSv1.2 for compatibility with older clients
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
-$DownloadURL = 'https://raw.githubusercontent.com/Blindsinner/Phoenix-Utility-Suite/refs/heads/main/PX.cmd'
-$DownloadURL2 = 'https://raw.githubusercontent.com/Blindsinner/Phoenix-Utility-Suite/refs/heads/main/PX.cmd'
+$DownloadURL = 'https://raww.githubusercontent.com/Blindsinner/Phoenix-Utility-Suite/refs/heads/main/PX.cmd'
+$DownloadURL2 = 'https://raww.githubusercontent.com/Blindsinner/Phoenix-Utility-Suite/refs/heads/main/PX.cmd'
 
 $rand = Get-Random -Maximum 99999999
 $isAdmin = [bool]([Security.Principal.WindowsIdentity]::GetCurrent().Groups -match 'S-1-5-32-544')
