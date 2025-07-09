@@ -1,6 +1,6 @@
 @echo off
 REM ================================================================
-REM                      Phoenix Windows Utility Suite Advanced
+REM              Phoenix Windows Utility Suite (Enterprise)
 REM              (Developed by MD Faysal Mahmud – Revised)
 REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
@@ -27,8 +27,8 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo              PHOENIX WINDOWS UTILITY SUITE Advanced
-    echo                  (Developed by MD Faysal Mahmud)
+    echo               PHOENIX WINDOWS UTILITY SUITE (Enterprise)
+    echo                    (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
     echo   [1] Full Windows Update ^& Component Repair
@@ -81,16 +81,16 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo [3/13] Renaming cache folders (SoftwareDistribution ^& catroot2)...
-    if exist "%Systemroot%\SoftwareDistribution.old" ( rd /s /q "%Systemroot%\SoftwareDistribution.old" >nul 2>&1 )
-    if exist "%Systemroot%\System32\catroot2.old" ( rd /s /q "%Systemroot%\System32\catroot2.old" >nul 2>&1 )
-    if exist "%Systemroot%\SoftwareDistribution" ( Ren %Systemroot%\SoftwareDistribution SoftwareDistribution.old >nul 2>&1 )
-    if exist "%Systemroot%\System32\catroot2" ( Ren %Systemroot%\System32\catroot2 catroot2.old >nul 2>&1 )
+    if exist "%SystemRoot%\SoftwareDistribution.old" ( rd /s /q "%SystemRoot%\SoftwareDistribution.old" >nul 2>&1 )
+    if exist "%SystemRoot%\System32\catroot2.old" ( rd /s /q "%SystemRoot%\System32\catroot2.old" >nul 2>&1 )
+    if exist "%SystemRoot%\SoftwareDistribution" ( Ren %SystemRoot%\SoftwareDistribution SoftwareDistribution.old >nul 2>&1 )
+    if exist "%SystemRoot%\System32\catroot2" ( Ren %SystemRoot%\System32\catroot2 catroot2.old >nul 2>&1 )
     echo        Done.
     echo.
     
     echo [4/13] Re-creating cache folders...
-    md "%windir%\SoftwareDistribution" >nul 2>&1
-    md "%windir%\System32\catroot2" >nul 2>&1
+    md "%SystemRoot%\SoftwareDistribution" >nul 2>&1
+    md "%SystemRoot%\System32\catroot2" >nul 2>&1
     echo        Done.
     echo.
 
@@ -142,7 +142,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo [11/13] Running deep system cleanup...
-    rd /s /q "%windir%\SoftwareDistribution\DeliveryOptimization" >nul 2>&1
+    rd /s /q "%SystemRoot%\SoftwareDistribution\DeliveryOptimization" >nul 2>&1
     cleanmgr /verylowdisk >nul 2>&1
     echo        Done.
     echo.
@@ -158,7 +158,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
     echo [13/13] Forcing new update detection...
     wuauclt /resetauthorization /detectnow >nul 2>&1
-    if exist "%windir%\System32\UsoClient.exe" (
+    if exist "%SystemRoot%\System32\UsoClient.exe" (
         UsoClient StartScan >nul 2>&1
     ) else (
         wuauclt /updatenow >nul 2>&1
@@ -235,7 +235,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
     echo [4/5] Optimizing disk (Defrag ^& Trim)...
     echo        This will now run. You will see its progress below.
-    defrag %SystemDrive% /O
+    defrag %SystemDrive%: /O
     echo        Disk optimization complete.
     echo.
 
@@ -276,7 +276,9 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo [1/2] Backing up drivers to %SystemDrive%\PhoenixDriverBackup...
-    if not exist "%SystemDrive%\PhoenixDriverBackup" ( md %SystemDrive%\PhoenixDriverBackup >nul 2>&1 )
+    if not exist "%SystemDrive%\PhoenixDriverBackup" (
+      md "%SystemDrive%\PhoenixDriverBackup" >nul 2>&1
+    )
     pnputil /export-driver * %SystemDrive%\PhoenixDriverBackup >nul 2>&1
     echo        Backup complete.
     echo.
