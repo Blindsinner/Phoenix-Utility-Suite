@@ -27,7 +27,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo                      PHOENIX UTILITY SUITE
+    echo                      PHOENIX WINDOWS UTILITY SUITE
     echo                   (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
