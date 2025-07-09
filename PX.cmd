@@ -33,15 +33,15 @@ title Phoenix Utility Suite - Main Menu
 
 echo ==================================================================
 echo                      PHOENIX UTILITY SUITE
-echo                 (Developed by MD Faysal Mahmud)
+echo                   (Developed by MD Faysal Mahmud)
 echo ==================================================================
 echo.
 echo   Please select a function:
 echo.
-echo   [1] Full Windows Update & Component Repair
-echo   [2] System Performance & Health Optimization
-echo   [3] Driver & Hardware Reset
-echo   [4] Complete Network Stack & Firewall Reset
+echo   [1] Full Windows Update ^& Component Repair
+echo   [2] System Performance ^& Health Optimization
+echo   [3] Driver ^& Hardware Reset
+echo   [4] Complete Network Stack ^& Firewall Reset
 echo   [5] Run Security Scan (Microsoft Defender)
 echo   [6] System Restart
 echo   [0] Exit
@@ -65,7 +65,7 @@ REM ==================================================================
 :update_fix
 cls
 title Phoenix Utility Suite - Performing Update Repair...
-echo [*] Initiating Full Windows Update & Component Repair...
+echo [*] Initiating Full Windows Update ^& Component Repair...
 echo.
 
 echo [1/8] Stopping essential services (Update, BITS, Crypto, Installer)...
@@ -77,7 +77,7 @@ net stop trustedinstaller >nul 2>&1
 echo      Services stopped.
 echo.
 
-echo [2/8] Clearing Update caches (SoftwareDistribution & catroot2)...
+echo [2/8] Clearing Update caches (SoftwareDistribution ^& catroot2)...
 if exist "%windir%\SoftwareDistribution" rd /s /q "%windir%\SoftwareDistribution"
 if exist "%windir%\System32\catroot2" rd /s /q "%windir%\System32\catroot2"
 md "%windir%\SoftwareDistribution"
@@ -136,10 +136,10 @@ REM ==================================================================
 :performance_fix
 cls
 title Phoenix Utility Suite - Optimizing System Performance...
-echo [*] Initiating System Performance & Health Optimization...
+echo [*] Initiating System Performance ^& Health Optimization...
 echo.
 
-echo [1/5] Cleaning all user & system temporary file caches...
+echo [1/5] Cleaning all user ^& system temporary file caches...
 del /q /f /s "%SystemRoot%\Temp\*" >nul 2>&1
 del /q /f /s "%SystemRoot%\prefetch\*" >nul 2>&1
 for /d %%p in ("C:\Users\*") do (
@@ -182,7 +182,7 @@ REM ==================================================================
 :driver_fix
 cls
 title Phoenix Utility Suite - Resetting Drivers...
-echo [*] Initiating Driver & Hardware Reset...
+echo [*] Initiating Driver ^& Hardware Reset...
 echo.
 echo [WARNING] This can cause screen flickering. It is generally safe
 echo           but a system restart afterwards is recommended.
@@ -212,7 +212,7 @@ REM ==================================================================
 :network_fix
 cls
 title Phoenix Utility Suite - Resetting Network...
-echo [*] Initiating Complete Network Stack & Firewall Reset...
+echo [*] Initiating Complete Network Stack ^& Firewall Reset...
 echo.
 
 echo [1/5] Flushing, releasing, renewing, and re-registering DNS/IP...
