@@ -1,6 +1,6 @@
 @echo off
 REM ================================================================
-REM                      Phoenix Windows Utility Suite
+REM                      Phoenix WIN Utility Suite
 REM              (Developed by MD Faysal Mahmud – Revised)
 REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
@@ -27,7 +27,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo                      PHOENIX WIN UTILITY SUITE
+    echo                      PHOENIX Windows UTILITY SUITE
     echo                   (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
@@ -51,7 +51,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     if "%choice%"=="5" goto security_scan
     if "%choice%"=="6" goto restart_pc
     if "%choice%"=="7" goto limitations
-    if "%choice%"=="0" exit /b
+    if "%choice%"=="0" goto self_delete
 
     rem Invalid selection
     echo.
@@ -336,3 +336,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     ) else (
         goto menu
     )
+
+:self_delete
+(goto) 2>nul & del "%~f0"
+exit /b
