@@ -46,6 +46,29 @@ This one-line command downloads and runs the suite automatically.
 
 3.  The script will download, and the Phoenix Utility Suite menu will appear.
 
+    A command prompt window will open displaying the PX menu:
+
+   
+    ```
+
+    ================================================================
+                         PHOENIX WINDOWS UTILITY SUITE
+                       (Developed by MD Faysal Mahmud)
+    ================================================================
+
+    [1] Full Windows Update & Component Repair
+    [2] System Performance & Health Optimization
+    [3] Driver & Hardware Reset
+    [4] Complete Network Stack & Firewall Reset
+    [5] Run Security Scan (Microsoft Defender)
+    [6] System Restart
+    [7] Limitations & Advanced Info
+    [0] Exit
+
+    ================================================================
+    Enter your choice [0-7]:
+    ```
+
 ### Method 2: Manual Execution
 
 If you prefer to download the file yourself, follow these steps:
