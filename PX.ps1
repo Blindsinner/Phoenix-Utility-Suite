@@ -7,6 +7,7 @@
     Phoenix Utility Suite (PX.cmd) from the official GitHub repository.
     It handles temporary file placement based on administrative rights,
     executes the batch script, and cleans up automatically upon completion.
+    This version is compatible with Windows PowerShell 5.1 and later.
 
 .NOTES
     Author: MD FAYSAL MAHMUD
@@ -30,8 +31,8 @@ Write-Host "Preparing to download the Phoenix Utility Suite..."
 # Generate a random number to ensure the temporary filename is unique.
 $rand = Get-Random -Maximum 99999999
 
-# Check if the script is running with Administrator privileges.
-$isAdmin = ([Security.Principal.WindowsIdentity]::GetCurrent()).Groups.Exists({$_.Value -eq 'S-1-5-32-544'})
+# Check if the script is running with Administrator privileges using a compatible method.
+$isAdmin = [bool]([Security.Principal.WindowsIdentity]::GetCurrent().Groups -match 'S-1-5-32-544')
 
 # Define the temporary file path. Use the system's Temp folder if admin, otherwise use the user's.
 $FilePath = if ($isAdmin) { "$env:SystemRoot\Temp\PX_$rand.cmd" } else { "$env:TEMP\PX_$rand.cmd" }
