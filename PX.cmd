@@ -1,7 +1,7 @@
 @echo off
 REM ================================================================
-REM                             Phoenix Windows Utility Suite
-REM                  (Developed by MD Faysal Mahmud – Revised)
+REM                      Phoenix Windows Utility Suite
+REM              (Developed by MD Faysal Mahmud – Revised)
 REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
 REM               optimizing performance, fixing drivers, and
@@ -27,8 +27,8 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo                             PHOENIX WINDOWS UTILITY SUITE
-    echo                       (Developed by MD Faysal Mahmud)
+    echo                     PHOENIX WINDOWS UTILITY SUITE 2.0
+    echo                    (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
     echo   [1] Full Windows Update ^& Component Repair
@@ -62,38 +62,81 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 :update_fix
     cls
     title Windows Update ^& Component Repair
-    echo [*] Performing Update Repair...
+    echo [*] Performing Full Update Repair...
+    echo.
+    
+    echo ======== RUNNING NEW ADVANCED REPAIR STEPS (1-7) ========
     echo.
 
-    echo [1/11] Stopping services...
+    echo [NEW 1/7] Setting TrustedInstaller to auto-start...
+    SC config trustedinstaller start=auto
+    echo.
+
+    echo [NEW 2/7] Stopping additional services (including AppIDSvc)...
+    net stop bits
+    net stop wuauserv
+    net stop msiserver
+    net stop cryptsvc
+    net stop appidsvc
+    echo.
+
+    echo [NEW 3/7] Renaming cache folders (safer method)...
+    Ren %Systemroot%\SoftwareDistribution SoftwareDistribution.old
+    Ren %Systemroot%\System32\catroot2 catroot2.old
+    echo.
+
+    echo [NEW 4/7] Re-registering additional core DLLs...
+    regsvr32.exe /s atl.dll
+    regsvr32.exe /s urlmon.dll
+    regsvr32.exe /s mshtml.dll
+    echo.
+    
+    echo [NEW 5/7] Resetting Winsock...
+    netsh winsock reset
+    netsh winsock reset proxy
+    echo.
+
+    echo [NEW 6/7] Cleaning up PnP drivers...
+    rundll32.exe pnpclean.dll,RunDLL_PnpClean /DRIVERS /MAXCLEAN
+    echo.
+
+    echo [NEW 7/7] Running full DISM health suite...
+    dism /Online /Cleanup-image /ScanHealth
+    dism /Online /Cleanup-image /CheckHealth
+    echo.
+
+    echo ======== RUNNING ORIGINAL REPAIR STEPS (8-18) ========
+    echo.
+
+    echo [8/18] Stopping services...
     for %%S in (wuauserv bits cryptsvc msiserver trustedinstaller) do (
         net stop %%S >nul 2>&1
     )
     echo        Done.
     echo.
 
-    echo [2/11] Clearing Update caches...
+    echo [9/18] Clearing Update caches...
     rd /s /q "%windir%\SoftwareDistribution"      >nul 2>&1
-    rd /s /q "%windir%\System32\catroot2"         >nul 2>&1
-    md "%windir%\SoftwareDistribution"           >nul
-    md "%windir%\System32\catroot2"               >nul
+    rd /s /q "%windir%\System32\catroot2"          >nul 2>&1
+    md "%windir%\SoftwareDistribution"            >nul
+    md "%windir%\System32\catroot2"                >nul
     echo        Done.
     echo.
 
-    echo [3/11] Re-registering Update DLLs...
+    echo [10/18] Re-registering Update DLLs...
     for %%D in (wuapi.dll wups.dll wuaueng.dll wucltui.dll msxml3.dll) do (
         regsvr32.exe /s %%D >nul 2>&1
     )
     echo        Done.
     echo.
 
-    echo [4/11] Resetting OSUpgrade registry keys...
+    echo [11/18] Resetting OSUpgrade registry keys...
     reg delete    "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade\Rollback" /f >nul 2>&1
     reg add       "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade"       /f >nul 2>&1
     echo        Done.
     echo.
 
-    echo [5/11] Running SFC (System File Checker)...
+    echo [12/18] Running SFC (System File Checker)...
     echo.
     echo        ========================= ATTENTION =========================
     echo        The system scan is starting. This can take 5-15 minutes
@@ -105,7 +148,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo        SFC complete.
     echo.
 
-    echo [6/11] Running DISM RestoreHealth...
+    echo [13/18] Running DISM RestoreHealth...
     echo.
     echo        ========================= ATTENTION =========================
     echo        The component store repair is starting. This is often
@@ -117,7 +160,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo        DISM complete.
     echo.
 
-    echo [7/11] Cleaning up component store (WinSxS)...
+    echo [14/18] Cleaning up component store (WinSxS)...
     echo.
     echo        ========================= ATTENTION =========================
     echo        Component cleanup is starting. This removes unneeded
@@ -128,12 +171,12 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo        Component cleanup complete.
     echo.
 
-    echo [8/11] Deleting Delivery Optimization cache...
+    echo [15/18] Deleting Delivery Optimization cache...
     rd /s /q "%windir%\SoftwareDistribution\DeliveryOptimization" >nul 2>&1
     echo        Done.
     echo.
 
-    echo [9/11] Running deep system cleanup...
+    echo [16/18] Running deep system cleanup...
     echo.
     echo        ========================= ATTENTION =========================
     echo        A deep system cleanup is now running. This may take
@@ -144,14 +187,20 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo        Deep cleanup complete.
     echo.
 
-    echo [10/11] Restarting services...
+    echo [17/18] Restarting services...
     for %%S in (wuauserv bits cryptsvc msiserver trustedinstaller) do (
         net start %%S >nul 2>&1
     )
+    rem Also restart the services from the new list
+    net start bits
+    net start wuauserv
+    net start msiserver
+    net start cryptsvc
+    net start appidsvc
     echo        Done.
     echo.
 
-    echo [11/11] Forcing new update detection...
+    echo [18/18] Forcing new update detection...
     wuauclt /resetauthorization /detectnow >nul 2>&1
     if exist "%windir%\System32\UsoClient.exe" (
         UsoClient StartScan >nul 2>&1
@@ -162,7 +211,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo ================================================================
-    echo [SUCCESS] Update repair complete. Check Settings -^> Windows Update.
+    echo [SUCCESS] Full update repair complete. Check Settings -^> Windows Update.
     echo ================================================================
     pause
     goto menu
@@ -293,9 +342,9 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo [1/5] IP/DNS flush ^& renew...
-    ipconfig /flushdns    >nul 2>&1
-    ipconfig /release     >nul 2>&1
-    ipconfig /renew       >nul 2>&1
+    ipconfig /flushdns   >nul 2>&1
+    ipconfig /release    >nul 2>&1
+    ipconfig /renew      >nul 2>&1
     ipconfig /registerdns >nul 2>&1
     echo        Done.
     echo.
@@ -344,7 +393,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     cls
     title Limitations and Advanced Information
     echo ================================================================
-    echo        What This Script CANNOT Fix
+    echo               What This Script CANNOT Fix
     echo ================================================================
     echo.
     echo This script is powerful, but some issues require manual intervention:
