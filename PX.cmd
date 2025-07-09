@@ -1,7 +1,7 @@
 @echo off
 REM ================================================================
-REM                      Phoenix WIN Utility Suite
-REM              (Developed by MD Faysal Mahmud – Revised)
+REM                       Phoenix Utility Suite
+REM             (Developed by MD Faysal Mahmud – Revised)
 REM
 REM  Description: All-in-one toolkit for repairing Windows Update,
 REM               optimizing performance, fixing drivers, and
@@ -27,7 +27,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     title Phoenix Utility Suite - Main Menu
 
     echo ================================================================
-    echo                      PHOENIX Windows UTILITY SUITE
+    echo                       PHOENIX UTILITY SUITE
     echo                   (Developed by MD Faysal Mahmud)
     echo ================================================================
     echo.
@@ -51,7 +51,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     if "%choice%"=="5" goto security_scan
     if "%choice%"=="6" goto restart_pc
     if "%choice%"=="7" goto limitations
-    if "%choice%"=="0" goto self_delete
+    if "%choice%"=="0" exit /b
 
     rem Invalid selection
     echo.
@@ -69,59 +69,59 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     for %%S in (wuauserv bits cryptsvc msiserver trustedinstaller) do (
         net stop %%S >nul 2>&1
     )
-    echo      Done.
+    echo       Done.
     echo.
 
     echo [2/8] Clearing Update caches...
     rd /s /q "%windir%\SoftwareDistribution"    >nul 2>&1
     rd /s /q "%windir%\System32\catroot2"        >nul 2>&1
-    md "%windir%\SoftwareDistribution"           >nul
-    md "%windir%\System32\catroot2"              >nul
-    echo      Done.
+    md "%windir%\SoftwareDistribution"          >nul
+    md "%windir%\System32\catroot2"            >nul
+    echo       Done.
     echo.
 
     echo [3/8] Re-registering Update DLLs...
     for %%D in (wuapi.dll wups.dll wuaueng.dll wucltui.dll msxml3.dll) do (
         regsvr32.exe /s %%D >nul 2>&1
     )
-    echo      Done.
+    echo       Done.
     echo.
 
     echo [4/8] Resetting OSUpgrade registry keys...
-    reg delete   "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade\Rollback" /f >nul 2>&1
-    reg add      "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade"    /f >nul 2>&1
-    echo      Done.
+    reg delete    "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade\Rollback" /f >nul 2>&1
+    reg add       "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\OSUpgrade"    /f >nul 2>&1
+    echo       Done.
     echo.
 
     echo [5/8] Running SFC (System File Checker)...
     echo.
-    echo      ========================= ATTENTION =========================
-    echo      The system scan is starting. This can take 5-15 minutes
-    echo      and may look frozen at first. PLEASE BE PATIENT.
-    echo      You will see a percentage count when verification begins.
-    echo      ===========================================================
+    echo       ========================= ATTENTION =========================
+    echo       The system scan is starting. This can take 5-15 minutes
+    echo       and may look frozen at first. PLEASE BE PATIENT.
+    echo       You will see a percentage count when verification begins.
+    echo       ===========================================================
     echo.
     sfc /scannow
-    echo      SFC complete.
+    echo       SFC complete.
     echo.
 
     echo [6/8] Running DISM RestoreHealth...
     echo.
-    echo      ========================= ATTENTION =========================
-    echo      The component store repair is starting. This is often
-    echo      slower than SFC. PLEASE BE PATIENT AND DO NOT CLOSE.
-    echo      You will see a progress bar when it begins.
-    echo      ===========================================================
+    echo       ========================= ATTENTION =========================
+    echo       The component store repair is starting. This is often
+    echo       slower than SFC. PLEASE BE PATIENT AND DO NOT CLOSE.
+    echo       You will see a progress bar when it begins.
+    echo       ===========================================================
     echo.
     DISM /Online /Cleanup-Image /RestoreHealth
-    echo      DISM complete.
+    echo       DISM complete.
     echo.
 
     echo [7/8] Restarting services...
     for %%S in (wuauserv bits cryptsvc msiserver trustedinstaller) do (
         net start %%S >nul 2>&1
     )
-    echo      Done.
+    echo       Done.
     echo.
 
     echo [8/8] Forcing new update detection...
@@ -131,7 +131,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     ) else (
         wuauclt /updatenow >nul 2>&1
     )
-    echo      Scan initiated.
+    echo       Scan initiated.
     echo.
 
     echo ================================================================
@@ -146,64 +146,72 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo [*] Optimizing Performance ^& Health...
     echo.
 
-    echo [1/5] Cleaning temp files (using robust method)...
-    if exist "%SystemRoot%\Temp" ( rd /s /q "%SystemRoot%\Temp" & md "%SystemRoot%\Temp" ) >nul 2>&1
-    if exist "%SystemRoot%\Prefetch" ( rd /s /q "%SystemRoot%\Prefetch" & md "%SystemRoot%\Prefetch" ) >nul 2>&1
+    echo [1/5] Cleaning temp files...
+    
+    REM ============================= FIX START ===================================
+    REM The original 'rd /s /q' command deleted the folder containing this script,
+    REM causing it to crash. The corrected commands below delete the *contents*
+    REM of the temp folders, which is safer and prevents the crash.
+    
+    del /q /f /s "%SystemRoot%\Temp\*.*" >nul 2>&1
+    del /q /f /s "%SystemRoot%\Prefetch\*.*" >nul 2>&1
     for /d %%U in ("C:\Users\*") do (
         if exist "%%U\AppData\Local\Temp" (
-            ( rd /s /q "%%U\AppData\Local\Temp" & md "%%U\AppData\Local\Temp" ) >nul 2>&1
+            del /q /f /s "%%U\AppData\Local\Temp\*.*" >nul 2>&1
         )
     )
-    echo      Done.
+    REM ============================== FIX END ====================================
+
+    echo       Done.
     echo.
 
     echo [2/5] Running SFC (System File Checker)...
     echo.
-    echo      ========================= ATTENTION =========================
-    echo      The system scan is starting. This can take 5-15 minutes
-    echo      and may look frozen at first. PLEASE BE PATIENT.
-    echo      You will see a percentage count when verification begins.
-    echo      ===========================================================
+    echo       ========================= ATTENTION =========================
+    echo       The system scan is starting. This can take 5-15 minutes
+    echo       and may look frozen at first. PLEASE BE PATIENT.
+    echo       You will see a percentage count when verification begins.
+    echo       ===========================================================
     echo.
     sfc /scannow
-    echo      SFC scan complete.
+    echo       SFC scan complete.
     echo.
 
     echo [3/5] Running DISM RestoreHealth...
     echo.
-    echo      ========================= ATTENTION =========================
-    echo      The component store repair is starting. This is often
-    echo      slower than SFC. PLEASE BE PATIENT AND DO NOT CLOSE.
-    echo      You will see a progress bar when it begins.
-    echo      ===========================================================
+    echo       ========================= ATTENTION =========================
+    echo       The component store repair is starting. This is often
+    echo       slower than SFC. PLEASE BE PATIENT AND DO NOT CLOSE.
+    echo       You will see a progress bar when it begins.
+    echo       ===========================================================
     echo.
     DISM /Online /Cleanup-Image /RestoreHealth
-    echo      DISM scan complete.
+    echo       DISM scan complete.
     echo.
 
     echo [4/5] Optimizing disk (Defrag ^& Trim)...
-    echo      This will now run. You will see its progress below.
+    echo       This will now run. You will see its progress below.
     defrag C: /O
-    echo      Disk optimization complete.
+    echo       Disk optimization complete.
     echo.
 
     echo [5/5] Launching Disk Cleanup UI...
     echo.
-    echo      ========================= ACTION REQUIRED =========================
-    echo      A new window will open. Please SELECT the items you want
-    echo      to clean, then click OK. The script will wait for you.
-    echo      ===================================================================
+    echo       ========================= ACTION REQUIRED =========================
+    echo       A new window will open. Please SELECT the items you want
+    echo       to clean, then click OK. The script will wait for you.
+    echo       ===================================================================
     echo.
     start "" /wait cleanmgr /sageset:1
     
     echo.
-    echo      ========================= PLEASE WAIT =========================
-    echo      Disk Cleanup is now running based on your selections.
-    echo      This window will wait until it is finished.
-    echo      =============================================================
+    echo       ========================= PLEASE WAIT =========================
+    echo       Disk Cleanup is now running based on your selections.
+    echo       This window will wait until it is finished.
+    echo       =============================================================
     echo.
     start "" /wait cleanmgr /sagerun:1
-    echo      Disk Cleanup finished.
+    echo       Disk Cleanup finished.
     echo.
 
     echo ================================================================
@@ -226,12 +234,12 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo [1/2] Backing up drivers to C:\PhoenixDriverBackup...
     md C:\PhoenixDriverBackup >nul 2>&1
     pnputil /export-driver * C:\PhoenixDriverBackup >nul 2>&1
-    echo      Backup complete.
+    echo       Backup complete.
     echo.
 
     echo [2/2] Scanning for hardware changes...
     pnputil /scan-devices
-    echo      Scan complete.
+    echo       Scan complete.
     echo.
 
     echo ================================================================
@@ -247,26 +255,26 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     echo.
 
     echo [1/5] IP/DNS flush ^& renew...
-    ipconfig /flushdns   >nul 2>&1
-    ipconfig /release    >nul 2>&1
-    ipconfig /renew      >nul 2>&1
-    ipconfig /registerdns>nul 2>&1
-    echo      Done.
+    ipconfig /flushdns    >nul 2>&1
+    ipconfig /release     >nul 2>&1
+    ipconfig /renew       >nul 2>&1
+    ipconfig /registerdns >nul 2>&1
+    echo       Done.
     echo.
 
     echo [2/5] Winsock reset...
     netsh winsock reset   >nul 2>&1
-    echo      Done.
+    echo       Done.
     echo.
 
     echo [3/5] TCP/IP reset...
     netsh int ip reset    >nul 2>&1
-    echo      Done.
+    echo       Done.
     echo.
 
     echo [4/5] Resetting Windows Firewall...
     netsh advfirewall reset>nul 2>&1
-    echo      Done.
+    echo       Done.
     echo.
 
     echo ================================================================
@@ -298,7 +306,7 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     cls
     title Limitations and Advanced Information
     echo ================================================================
-    echo      What This Script CANNOT Fix
+    echo       What This Script CANNOT Fix
     echo ================================================================
     echo.
     echo This script is powerful, but some issues require manual intervention:
@@ -336,7 +344,3 @@ setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
     ) else (
         goto menu
     )
-
-:self_delete
-(goto) 2>nul & del "%~f0"
-exit /b
